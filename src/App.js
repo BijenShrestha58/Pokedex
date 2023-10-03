@@ -1,25 +1,19 @@
-import logo from './logo.svg';
-import './App.css';
+import { Route, Routes } from "react-router";
+import { Nav } from "./components/nav";
+import { Dex } from "./pages/dex";
+import "./App.scss";
+import React from "react";
+const App = () => {
+  const routes = [{ path: "/", element: <Dex /> }];
 
-function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Routes>
+        {routes.map((route, key) => (
+          <Route path={route.path} element={route.element} key={key} />
+        ))}
+      </Routes>
+    </>
   );
-}
-
+};
 export default App;

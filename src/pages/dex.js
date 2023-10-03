@@ -22,7 +22,7 @@ export const Dex = () => {
   useEffect(() => {
     const backgroundImages = [background1, background2, background3];
     const randomIndex = Math.floor(Math.random() * backgroundImages.length);
-    setSelectedImage(backgroundImages[randomIndex]);
+    setSelectedImage(backgroundImages[randomIndex]); //for randomly changing bg image
   }, []);
 
   useEffect(() => loadPokemonList(), [currentPageUrl]);
@@ -37,11 +37,10 @@ export const Dex = () => {
     });
   };
   const gotoNextPage = () => {
-    console.log("clicked");
-    setCurrentPageUrl(nextPageUrl);
+    setCurrentPageUrl(nextPageUrl); //the next page url becomes the current page url when the button is pressed
   };
   const gotoPrevPage = () => {
-    setCurrentPageUrl(prevPageUrl);
+    setCurrentPageUrl(prevPageUrl); //the prev page url becomes the current page url when the button is pressed
   };
   return (
     <body
@@ -63,7 +62,7 @@ export const Dex = () => {
         {loading ? (
           <Loader />
         ) : (
-          pokemonList.map((x, key) => <Card pokename={x} key={key} />)
+          pokemonList.map((x, key) => <Card pokename={x} key={key} />) //pass name and url of each pokemon to card
         )}
       </section>
       {/* <div className="pagination-numbers">

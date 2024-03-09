@@ -4,23 +4,35 @@ import { Pagination } from "../components/pagination";
 import { Card } from "../components/card";
 import { Loader } from "../components/loader";
 import { Nav } from "../components/nav";
-import background1 from "../assets/background1.webp";
-import background2 from "../assets/background2.jpeg";
+import background1 from "../assets/background1.jpg";
+import background2 from "../assets/background2.jpg";
 import background3 from "../assets/background3.jpg";
-// import { PaginationNumbers } from "../components/paginationnumbers";
+import background4 from "../assets/background4.jpg";
+import background5 from "../assets/background5.jpg";
+import background6 from "../assets/background6.jpg";
+import { PaginationNumbers } from "../components/paginationnumbers";
 
 export const Dex = () => {
+  const limit = 9;
   const [pokemonList, setPokemonList] = useState([]);
   const [loading, setLoading] = useState(false);
   const [currentPageUrl, setCurrentPageUrl] = useState(
-    "https://pokeapi.co/api/v2/pokemon?limit=9"
+    `https://pokeapi.co/api/v2/pokemon?limit=${limit}`
   );
   const [nextPageUrl, setNextPageUrl] = useState();
   const [prevPageUrl, setPrevPageUrl] = useState();
   const [selectedImage, setSelectedImage] = useState();
+  const [pageNumber, setPageNumber] = useState(1);
   // const [count, setCount] = useState();
   useEffect(() => {
-    const backgroundImages = [background1, background2, background3];
+    const backgroundImages = [
+      background1,
+      background2,
+      background3,
+      background4,
+      background5,
+      background6,
+    ];
     const randomIndex = Math.floor(Math.random() * backgroundImages.length);
     setSelectedImage(backgroundImages[randomIndex]); //for randomly changing bg image
   }, []);
@@ -33,6 +45,7 @@ export const Dex = () => {
       setNextPageUrl(res.data.next);
       setPrevPageUrl(res.data.previous);
       setPokemonList(res.data.results);
+      getCurrentPageNumber();
       // setCount(res.data.count);
     });
   };
@@ -42,6 +55,26 @@ export const Dex = () => {
   const gotoPrevPage = () => {
     setCurrentPageUrl(prevPageUrl); //the prev page url becomes the current page url when the button is pressed
   };
+
+  const getCurrentPageNumber = () => {
+    const offsetNumber = currentPageUrl
+      ? currentPageUrl.match(/offset=(\d+)/) //get an array that contains the exact match and the captured value
+      : null;
+    if (offsetNumber && offsetNumber[1]) {
+      // Calculate the page number based on the offset and limit
+      const offset = parseInt(offsetNumber[1], 10);
+      setPageNumber(offset / limit + 1);
+    }
+  };
+
+  const pageChangeHandler = (newPageNumber) => {
+    setPageNumber(newPageNumber);
+    const offset = limit * (newPageNumber - 1);
+    setCurrentPageUrl(
+      `https://pokeapi.co/api/v2/pokemon?offset=${offset}&limit=${limit}`
+    );
+  };
+  console.log(currentPageUrl);
   return (
     <body
       style={{
@@ -65,9 +98,12 @@ export const Dex = () => {
           pokemonList.map((x, key) => <Card pokename={x} key={key} />) //pass name and url of each pokemon to card
         )}
       </section>
-      {/* <div className="pagination-numbers">
-        <PaginationNumbers count={count} />
-      </div> */}
+      <div className="pagination-numbers">
+        <PaginationNumbers
+          pageNumber={pageNumber}
+          onPageNumberChange={pageChangeHandler}
+        />
+      </div>
     </body>
   );
 };

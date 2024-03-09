@@ -15,14 +15,15 @@ export const Card = ({ pokename }) => {
   const handleMouseEnter = () => {
     //animate pokemon sprite on hover
     setImageSource(
-      pokemon.sprites?.versions["generation-v"]["black-white"].animated
-        .front_default
+      pokemon.sprites?.versions["generation-v"]["black-white"]?.animated
+        .front_default || pokemon.sprites?.front_default
     );
   };
   const handleMouseLeave = () => {
     //display static sprite when mouse leaves the card
     setImageSource(
-      pokemon.sprites?.versions["generation-v"]["black-white"].front_default
+      pokemon.sprites?.versions["generation-v"]["black-white"]?.front_default ||
+        pokemon.sprites?.front_default
     );
   };
   useEffect(() => loadPokemon(), []);
@@ -34,7 +35,8 @@ export const Card = ({ pokename }) => {
       setPokemon(res.data);
       setImageSource(
         //initialized here so that it is rendered at the beginning
-        res.data.sprites?.versions["generation-v"]["black-white"].front_default
+        res.data?.sprites?.versions["generation-v"]["black-white"]
+          ?.front_default || res.data?.sprites.front_default
       );
     });
   };

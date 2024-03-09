@@ -1,9 +1,16 @@
-// export const PaginationNumbers = ({ count }) => {
-//   let i = 1;
-//   while (i <= count) {}
-//   return (
-//     <>
-//       <div></div>
-//     </>
-//   );
-// };
+export const PaginationNumbers = (props) => {
+  const handleInputChange = (e) => {
+    const newPageNumber = parseInt(e.target.value, 10);
+    props.onPageNumberChange(newPageNumber);
+  };
+
+  return (
+    <>
+      <input
+        type="number"
+        onChange={handleInputChange}
+        value={props.pageNumber}
+      />
+    </>
+  );
+};

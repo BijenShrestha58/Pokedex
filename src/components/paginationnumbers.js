@@ -8,6 +8,8 @@ export const PaginationNumbers = (props) => {
     <>
       <input
         type="number"
+        min="1"
+        max={props.maxPageNumber}
         onChange={handleInputChange}
         value={props.pageNumber}
       />

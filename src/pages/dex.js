@@ -11,6 +11,7 @@ import background4 from "../assets/background4.jpg";
 import background5 from "../assets/background5.jpg";
 import background6 from "../assets/background6.jpg";
 import { PaginationNumbers } from "../components/paginationnumbers";
+import { GetLastPage } from "../components/getmaxpage";
 
 export const Dex = () => {
   const limit = 9;
@@ -23,7 +24,8 @@ export const Dex = () => {
   const [prevPageUrl, setPrevPageUrl] = useState();
   const [selectedImage, setSelectedImage] = useState();
   const [pageNumber, setPageNumber] = useState(1);
-  // const [count, setCount] = useState();
+  const [count, setCount] = useState(0);
+
   useEffect(() => {
     const backgroundImages = [
       background1,
@@ -36,19 +38,39 @@ export const Dex = () => {
     const randomIndex = Math.floor(Math.random() * backgroundImages.length);
     setSelectedImage(backgroundImages[randomIndex]); //for randomly changing bg image
   }, []);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const count = await GetLastPage();
+        setCount(count);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
 
+    fetchData();
+  }, []);
   useEffect(() => loadPokemonList(), [currentPageUrl]);
+
+  const maxPageNumber = Math.ceil(count / limit);
+
   const loadPokemonList = () => {
     setLoading(true);
     axios.get(currentPageUrl).then((res) => {
       setLoading(false);
       setNextPageUrl(res.data.next);
       setPrevPageUrl(res.data.previous);
-      setPokemonList(res.data.results);
+      const filteredList = res.data.results.filter((item) => {
+        const pokemonId = item.url.split("/").slice(-2, -1)[0];
+        if (pokemonId < 10000) return true;
+        else setNextPageUrl(null);
+      });
+      setPokemonList(filteredList);
       getCurrentPageNumber();
       // setCount(res.data.count);
     });
   };
+
   const gotoNextPage = () => {
     setCurrentPageUrl(nextPageUrl); //the next page url becomes the current page url when the button is pressed
   };
@@ -74,7 +96,7 @@ export const Dex = () => {
       `https://pokeapi.co/api/v2/pokemon?offset=${offset}&limit=${limit}`
     );
   };
-  console.log(currentPageUrl);
+
   return (
     <body
       style={{
@@ -100,6 +122,7 @@ export const Dex = () => {
       </section>
       <div className="pagination-numbers">
         <PaginationNumbers
+          maxPageNumber={maxPageNumber}
           pageNumber={pageNumber}
           onPageNumberChange={pageChangeHandler}
         />

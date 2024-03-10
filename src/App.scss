@@ -27,7 +27,7 @@ body {
     border-radius: 8px;
     display: flex;
     flex-direction: column;
-    margin-top: 5vh;
+    margin-top: 4vh;
     align-items: center;
 
     &:hover {
@@ -192,6 +192,27 @@ body {
       &:hover {
         background-color: rgba(0, 0, 0, 0.1);
       }
+    }
+  }
+}
+
+.pagination-numbers {
+  display: flex;
+  justify-content: center;
+  margin-top: 4vh;
+  input {
+    height: 4vh;
+    width: 4vw;
+    text-align: center;
+    font-size: large;
+    font-family: "Skranji", cursive;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 4px;
+
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
     }
   }
 }

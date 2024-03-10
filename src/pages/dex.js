@@ -1,6 +1,5 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Pagination } from "../components/pagination";
 import { Card } from "../components/card";
 import { Loader } from "../components/loader";
 import { Nav } from "../components/nav";
@@ -107,12 +106,7 @@ export const Dex = () => {
       }}
     >
       <Nav />
-      <div className="pagination-buttons">
-        <Pagination
-          gotoNextPage={nextPageUrl ? gotoNextPage : null}
-          gotoPrevPage={prevPageUrl ? gotoPrevPage : null}
-        />
-      </div>
+      <div className="pagination-buttons"></div>
       <section className="dex-area">
         {loading ? (
           <Loader />
@@ -122,6 +116,8 @@ export const Dex = () => {
       </section>
       <div className="pagination-numbers">
         <PaginationNumbers
+          gotoNextPage={nextPageUrl ? gotoNextPage : null}
+          gotoPrevPage={prevPageUrl ? gotoPrevPage : null}
           maxPageNumber={maxPageNumber}
           pageNumber={pageNumber}
           onPageNumberChange={pageChangeHandler}

@@ -4,8 +4,19 @@ export const PaginationNumbers = (props) => {
     props.onPageNumberChange(newPageNumber);
   };
 
+  const prevVisibility = props.gotoPrevPage ? "visible" : "hidden";
+  const nextVisibility = props.gotoNextPage ? "visible" : "hidden";
+
   return (
     <>
+      <button
+        className="pagination-button prev material-icons"
+        onClick={props.gotoPrevPage}
+        style={{ visibility: prevVisibility }}
+      >
+        chevron_left
+      </button>
+
       <input
         type="number"
         min="1"
@@ -13,6 +24,14 @@ export const PaginationNumbers = (props) => {
         onChange={handleInputChange}
         value={props.pageNumber}
       />
+
+      <button
+        className="pagination-button next material-icons"
+        onClick={props.gotoNextPage}
+        style={{ visibility: nextVisibility }}
+      >
+        chevron_right
+      </button>
     </>
   );
 };

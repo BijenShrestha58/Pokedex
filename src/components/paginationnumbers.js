@@ -11,6 +11,13 @@ export const PaginationNumbers = (props) => {
     <>
       <button
         className="pagination-button prev material-icons"
+        onClick={props.gotoFirstPage}
+        style={{ visibility: prevVisibility }}
+      >
+        keyboard_double_arrow_left
+      </button>
+      <button
+        className="pagination-button prev material-icons"
         onClick={props.gotoPrevPage}
         style={{ visibility: prevVisibility }}
       >
@@ -31,6 +38,13 @@ export const PaginationNumbers = (props) => {
         style={{ visibility: nextVisibility }}
       >
         chevron_right
+      </button>
+      <button
+        className="pagination-button next material-icons"
+        onClick={props.gotoLastPage}
+        style={{ visibility: nextVisibility }}
+      >
+        keyboard_double_arrow_right
       </button>
     </>
   );

@@ -76,6 +76,12 @@ export const Dex = () => {
   const gotoPrevPage = () => {
     setCurrentPageUrl(prevPageUrl); //the prev page url becomes the current page url when the button is pressed
   };
+  const gotoLastPage = () => {
+    pageChangeHandler(maxPageNumber); //pass the last page number to pageChangeHandler
+  };
+  const gotoFirstPage = () => {
+    pageChangeHandler(1); //pass the first page number to pageChangeHandler
+  };
 
   const getCurrentPageNumber = () => {
     const offsetNumber = currentPageUrl
@@ -121,6 +127,8 @@ export const Dex = () => {
           maxPageNumber={maxPageNumber}
           pageNumber={pageNumber}
           onPageNumberChange={pageChangeHandler}
+          gotoFirstPage={prevPageUrl ? gotoFirstPage : null}
+          gotoLastPage={nextPageUrl ? gotoLastPage : null}
         />
       </div>
     </body>

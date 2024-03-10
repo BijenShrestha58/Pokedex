@@ -10,7 +10,7 @@ import background4 from "../assets/background4.jpg";
 import background5 from "../assets/background5.jpg";
 import background6 from "../assets/background6.jpg";
 import { PaginationNumbers } from "../components/paginationnumbers";
-import { GetLastPage } from "../components/getmaxpage";
+import { GetLastPage } from "../helpers/getmaxpage";
 
 export const Dex = () => {
   const limit = 9;

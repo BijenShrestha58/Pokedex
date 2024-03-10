@@ -1,17 +1,15 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Type } from "./type";
-import { typeColors } from "./typecolors";
+import { typeColors } from "../helpers/typecolors";
 import { Loader } from "./loader";
+import { CapitalizeFirstLetter } from "../helpers/capitalizefirstletter";
 
 export const Card = ({ pokename }) => {
   const [pokemon, setPokemon] = useState({});
   const [loading, setLoading] = useState(false);
   const [imageSource, setImageSource] = useState();
 
-  const capitalizeFirstLetter = (string) => {
-    return string && string.charAt(0).toUpperCase() + string.slice(1);
-  };
   const handleMouseEnter = () => {
     //animate pokemon sprite on hover
     setImageSource(
@@ -64,7 +62,7 @@ export const Card = ({ pokename }) => {
             <img className="dex-sprite" src={imageSource} />
             <div className="pokemon-id-and-name">
               <div className="pokemon-id">{getPokemonId(pokemon.id)}</div>
-              <div>{capitalizeFirstLetter(pokemon.name)}</div>
+              <div>{CapitalizeFirstLetter(pokemon.name)}</div>
             </div>
             <div className="types">
               {pokemon.types?.map((v, key) => (

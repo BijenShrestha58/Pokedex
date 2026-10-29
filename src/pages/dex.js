@@ -17,7 +17,7 @@ export const Dex = () => {
   const [pokemonList, setPokemonList] = useState([]);
   const [loading, setLoading] = useState(false);
   const [currentPageUrl, setCurrentPageUrl] = useState(
-    `https://pokeapi.co/api/v2/pokemon?limit=${limit}`
+    `https://pokeapi.co/api/v2/pokemon?limit=${limit}`,
   );
   const [nextPageUrl, setNextPageUrl] = useState();
   const [prevPageUrl, setPrevPageUrl] = useState();
@@ -49,26 +49,43 @@ export const Dex = () => {
 
     fetchData();
   }, []);
-  useEffect(() => loadPokemonList(), [currentPageUrl]);
+
+  useEffect(() => {
+    const loadPokemonList = () => {
+      setLoading(true);
+      axios.get(currentPageUrl).then((res) => {
+        setLoading(false);
+        setNextPageUrl(res.data.next);
+        setPrevPageUrl(res.data.previous);
+        const filteredList = res.data.results.filter((item) => {
+          const pokemonId = item.url.split("/").slice(-2, -1)[0];
+          if (pokemonId < 10000) return true;
+          else {
+            setNextPageUrl(null);
+            return false;
+          }
+        });
+        setPokemonList(filteredList);
+        getCurrentPageNumber();
+        // setCount(res.data.count);
+      });
+    };
+
+    const getCurrentPageNumber = () => {
+      const offsetNumber = currentPageUrl
+        ? currentPageUrl.match(/offset=(\d+)/) //get an array that contains the exact match and the captured value
+        : null;
+      if (offsetNumber && offsetNumber[1]) {
+        // Calculate the page number based on the offset and limit
+        const offset = parseInt(offsetNumber[1], 10);
+        setPageNumber(offset / limit + 1);
+      }
+    };
+
+    loadPokemonList();
+  }, [currentPageUrl]);
 
   const maxPageNumber = Math.ceil(count / limit);
-
-  const loadPokemonList = () => {
-    setLoading(true);
-    axios.get(currentPageUrl).then((res) => {
-      setLoading(false);
-      setNextPageUrl(res.data.next);
-      setPrevPageUrl(res.data.previous);
-      const filteredList = res.data.results.filter((item) => {
-        const pokemonId = item.url.split("/").slice(-2, -1)[0];
-        if (pokemonId < 10000) return true;
-        else setNextPageUrl(null);
-      });
-      setPokemonList(filteredList);
-      getCurrentPageNumber();
-      // setCount(res.data.count);
-    });
-  };
 
   const gotoNextPage = () => {
     setCurrentPageUrl(nextPageUrl); //the next page url becomes the current page url when the button is pressed
@@ -83,22 +100,11 @@ export const Dex = () => {
     pageChangeHandler(1); //pass the first page number to pageChangeHandler
   };
 
-  const getCurrentPageNumber = () => {
-    const offsetNumber = currentPageUrl
-      ? currentPageUrl.match(/offset=(\d+)/) //get an array that contains the exact match and the captured value
-      : null;
-    if (offsetNumber && offsetNumber[1]) {
-      // Calculate the page number based on the offset and limit
-      const offset = parseInt(offsetNumber[1], 10);
-      setPageNumber(offset / limit + 1);
-    }
-  };
-
   const pageChangeHandler = (newPageNumber) => {
     setPageNumber(newPageNumber);
     const offset = limit * (newPageNumber - 1);
     setCurrentPageUrl(
-      `https://pokeapi.co/api/v2/pokemon?offset=${offset}&limit=${limit}`
+      `https://pokeapi.co/api/v2/pokemon?offset=${offset}&limit=${limit}`,
     );
   };
 

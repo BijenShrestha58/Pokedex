@@ -14,18 +14,18 @@ export const Card = ({ pokename }) => {
     //animate pokemon sprite on hover
     setImageSource(
       pokemon.sprites?.versions["generation-v"]["black-white"]?.animated
-        .front_default || pokemon.sprites?.front_default
+        .front_default || pokemon.sprites?.front_default,
     );
   };
   const handleMouseLeave = () => {
     //display static sprite when mouse leaves the card
     setImageSource(
       pokemon.sprites?.versions["generation-v"]["black-white"]?.front_default ||
-        pokemon.sprites?.front_default
+        pokemon.sprites?.front_default,
     );
   };
-  useEffect(() => loadPokemon(), []);
-  const loadPokemon = () => {
+
+  useEffect(() => {
     setLoading(true);
     axios.get(pokename.url).then((res) => {
       // get data for pokemon stored in pokename using it's url
@@ -34,10 +34,11 @@ export const Card = ({ pokename }) => {
       setImageSource(
         //initialized here so that it is rendered at the beginning
         res.data?.sprites?.versions["generation-v"]["black-white"]
-          ?.front_default || res.data?.sprites.front_default
+          ?.front_default || res.data?.sprites.front_default,
       );
     });
-  };
+  }, [pokename.url]);
+
   const typeColor = pokemon.types && typeColors[pokemon.types[0]?.type.name]; //check if exists else error due to null during initial rendering
   const boxShadow = `${typeColor}40 -5px 5px, ${typeColor}30 -10px 10px, ${typeColor}20 -15px 15px, ${typeColor}10 -20px 20px, ${typeColor}05 -25px 25px, inset 0 0 0 .5px ${typeColor}`; //box-shadow according to type color
   const getPokemonId = (id) => {
@@ -59,7 +60,7 @@ export const Card = ({ pokename }) => {
           <Loader />
         ) : (
           <>
-            <img className="dex-sprite" src={imageSource} />
+            <img className="dex-sprite" src={imageSource} alt="img" />
             <div className="pokemon-id-and-name">
               <div className="pokemon-id">{getPokemonId(pokemon.id)}</div>
               <div>{CapitalizeFirstLetter(pokemon.name)}</div>
